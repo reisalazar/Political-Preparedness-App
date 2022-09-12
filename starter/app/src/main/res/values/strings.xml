@@ -3,7 +3,9 @@
     <string name="app_name">Political Preparedness</string>
     <string name="upcoming_elections">Upcoming Elections</string>
     <string name="saved_elections">Saved Elections</string>
+    <string name="img_ballot_logo_description">a image of a person putting a vote into ballot box</string>
+    <string name="find_my_representatives">Find my representatives</string>
 
-    <!-- TODO: Add necessary string values -->
+    <!--  Add necessary string values -->
 
 </resources>
