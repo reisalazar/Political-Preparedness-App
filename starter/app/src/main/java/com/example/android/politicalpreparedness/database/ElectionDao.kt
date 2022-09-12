@@ -4,6 +4,7 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
+import androidx.viewbinding.BuildConfig
 import com.example.android.politicalpreparedness.network.models.Election
 
 @Dao
@@ -19,4 +20,5 @@ interface ElectionDao {
 
     //TODO: Add clear query
 
+//    var key = BuildConfig.
 }
