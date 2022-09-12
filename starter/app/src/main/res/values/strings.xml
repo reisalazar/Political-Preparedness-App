@@ -5,6 +5,13 @@
     <string name="saved_elections">Saved Elections</string>
     <string name="img_ballot_logo_description">a image of a person putting a vote into ballot box</string>
     <string name="find_my_representatives">Find my representatives</string>
+    <string name="representative_search">Representative Search</string>
+    <string name="my_representatives">My Representatives</string>
+    <string name="use_my_location">Use my location</string>
+    <string name="address_line_1">Address Line 1</string>
+    <string name="address_line_2">Address Line 2</string>
+    <string name="city">City</string>
+    <string name="zip">Zip</string>
 
     <!--  Add necessary string values -->
 

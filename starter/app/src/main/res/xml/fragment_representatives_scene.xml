@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<MotionScene xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <ConstraintSet android:id="@+id/start">
+        <Constraint android:id="@id/tv_search_title" />
+        <Constraint android:id="@id/et_address_line_1" />
+        <Constraint android:id="@id/et_address_line_2" />
+        <Constraint android:id="@id/et_city" />
+        <Constraint android:id="@id/spinner_state" />
+        <Constraint android:id="@id/et_zip" />
+        <Constraint android:id="@id/btn_search" />
+        <Constraint android:id="@id/btn_location" />
+    </ConstraintSet>
+
+    <ConstraintSet android:id="@+id/end">
+        <Constraint
+            android:id="@id/tv_search_title"
+            android:visibility="gone" />
+        <Constraint
+            android:id="@id/et_address_line_1"
+            android:visibility="gone" />
+        <Constraint
+            android:id="@id/et_address_line_2"
+            android:visibility="gone" />
+        <Constraint
+            android:id="@id/et_city"
+            android:visibility="gone" />
+        <Constraint
+            android:id="@id/spinner_state"
+            android:visibility="gone" />
+        <Constraint
+            android:id="@id/et_zip"
+            android:visibility="gone" />
+        <Constraint
+            android:id="@id/search_button"
+            android:visibility="gone" />
+        <Constraint
+            android:id="@id/btn_location"
+            android:visibility="gone" />
+    </ConstraintSet>
+
+    <Transition
+        app:constraintSetStart="@id/start"
+        app:constraintSetEnd="@id/end">
+        <OnSwipe
+            app:dragDirection="dragUp"
+            app:touchAnchorId="@id/tv_search_title" />
+    </Transition>
+
+</MotionScene>

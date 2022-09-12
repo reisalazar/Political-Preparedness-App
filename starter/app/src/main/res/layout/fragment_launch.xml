@@ -31,7 +31,8 @@
             app:layout_constraintBottom_toTopOf="@+id/btn_find_my_representatives"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"
+            style="@style/btn_style" />
 
         <!--  Add Button to navigate to representatives. -->
         <Button
@@ -42,6 +43,8 @@
             android:text="@string/find_my_representatives"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"
+            style="@style/btn_style"
+            />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
