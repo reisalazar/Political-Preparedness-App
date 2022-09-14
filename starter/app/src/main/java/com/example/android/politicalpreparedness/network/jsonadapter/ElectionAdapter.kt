@@ -23,18 +23,3 @@ class ElectionAdapter {
         return division.id
     }
 }
-
-class DateAdapter {
-
-    @FromJson
-    fun dateFromJson (dateString: String): Date {
-        val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
-        return dateFormat.parse(dateString)!!
-    }
-
-    @ToJson
-    fun dateToJson(date: Date): String {
-        val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
-        return dateFormat.format(date)
-    }
-}

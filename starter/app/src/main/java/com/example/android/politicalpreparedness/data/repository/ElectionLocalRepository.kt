@@ -6,8 +6,8 @@ import com.example.android.politicalpreparedness.domain.LocalDataSource
 import com.example.android.politicalpreparedness.network.models.Election
 
 class ElectionLocalRepository(private val electionDao: Lazy<ElectionDao>): LocalDataSource {
-    override suspend fun getListOfElections(): Result<List<Election>> {
-        val items = electionDao.value.getListOfElections()
+    override suspend fun getAllElections(): Result<List<Election>> {
+        val items = electionDao.value.getAllElections()
         return if (items == null) {
             Result.Success(emptyList())
         } else {
@@ -15,20 +15,16 @@ class ElectionLocalRepository(private val electionDao: Lazy<ElectionDao>): Local
         }
     }
 
-    override suspend fun getElectionById(id: Long): Result<Election?> {
-        val item = electionDao.value.getElectionById(id)
-        return if (item != null) {
-            Result.Success(item)
-        } else {
-            Result.Error("Item doesn't exist")
-        }
+    override suspend fun getElection(id: Long): Result<Election?> {
+        val item = electionDao.value.get(id)
+        return Result.Success(item)
     }
 
     override suspend fun deleteElection(id: Long) {
-        electionDao.value.removeElectionById(id)
+        electionDao.value.delete(id)
     }
 
-    override suspend fun saveElection(election: Election) {
-        electionDao.value.saveElection(election)
+    override suspend fun insertElection(election: Election) {
+        electionDao.value.insert(election)
     }
 }
