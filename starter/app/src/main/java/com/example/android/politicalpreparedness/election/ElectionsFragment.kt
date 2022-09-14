@@ -22,8 +22,8 @@ class ElectionsFragment : Fragment() {
     // Declare ViewModel
     private val viewModel by viewModels<ElectionsViewModel> {
         ElectionsViewModelFactory(
-            ObjectServices.electionLocalRepository,
-            ObjectServices.electionNetworkRepository
+            ObjectServices.localRepository,
+            ObjectServices.networkRepository
         )
     }
 

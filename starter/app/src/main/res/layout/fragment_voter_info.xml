@@ -5,8 +5,9 @@
 
     <!--  Add data binding node for Voter Info ViewModel -->
     <data>
-
-        <import type="android.text.Html" />
+        <variable
+            name="electionId"
+            type="Long" />
 
         <variable
             name="viewModel"
@@ -90,10 +91,11 @@
         <!-- TODO: Add button to save election to Room -->
 
         <Button
+            android:id="@+id/btn_follow"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             style="@style/btn_style"
-            android:text="@string/follow_election"
+            tools:text="@string/follow_election"
             android:layout_margin="@dimen/margin_small"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

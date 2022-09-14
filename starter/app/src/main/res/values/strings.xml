@@ -13,6 +13,7 @@
     <string name="city">City</string>
     <string name="zip">Zip</string>
     <string name="follow_election">Follow Election</string>
+    <string name="unfollow_election">Unfollow Election</string>
 
     <!--  Add necessary string values -->
 

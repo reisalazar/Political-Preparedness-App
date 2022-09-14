@@ -36,16 +36,11 @@ class ElectionsViewModel(
     val status: LiveData<Status>
         get() = _status
 
-
-
-
-
-    // Create val and functions to populate live data for upcoming elections from the API
-    // and saved elections from local database
-
     // Create functions to navigate to saved or upcoming election voter info
     val navigationCommand: SingleLiveEvent<NavigationCommand> = SingleLiveEvent()
 
+    // Create val and functions to populate live data for upcoming elections from the API
+    // and saved elections from local database
     fun fetchUpcomingElection() {
         viewModelScope.launch {
             when (val result = networkRepository.value.getAllElections()) {
@@ -63,16 +58,14 @@ class ElectionsViewModel(
 
     fun fetchSavedElection() {
         viewModelScope.launch {
-            viewModelScope.launch {
-                when (val result = localRepository.value.getAllElections()) {
-                    is Result.Success -> {
-                        _status.postValue(Status.SUCCESS)
-                        _upcomingElections.postValue(result.data)
-                    }
-                    is Result.Error -> {
-                        _status.postValue(Status.ERROR("Error in fetch Saved Election"))
-                        showToast.value = "Failed to get elections from saved elections"
-                    }
+            when (val result = localRepository.value.getAllElections()) {
+                is Result.Success -> {
+                    _status.postValue(Status.SUCCESS)
+                    _upcomingElections.postValue(result.data)
+                }
+                is Result.Error -> {
+                    _status.postValue(Status.ERROR("Error in fetch Saved Election"))
+                    showToast.value = "Failed to get elections from saved elections"
                 }
             }
         }

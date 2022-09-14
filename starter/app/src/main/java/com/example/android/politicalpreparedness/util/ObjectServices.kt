@@ -7,19 +7,19 @@ import com.example.android.politicalpreparedness.database.ElectionDatabase
 import com.example.android.politicalpreparedness.network.CivicsApiService
 
 object ObjectServices {
-    internal lateinit var database: ElectionDatabase
+    private lateinit var electionDatabase: ElectionDatabase
 
-    internal lateinit var networkService: CivicsApiService
+    private lateinit var civicsApiService: CivicsApiService
 
     private val electionDao: Lazy<ElectionDao> = lazy {
-        return@lazy database.electionDao
+        return@lazy electionDatabase.electionDao
     }
 
-    val electionLocalRepository: Lazy<LocalRepository> = lazy {
+    val localRepository: Lazy<LocalRepository> = lazy {
         return@lazy LocalRepository(electionDao)
     }
 
-    val electionNetworkRepository: Lazy<NetworkRepository> = lazy {
-        return@lazy NetworkRepository(networkService)
+    val networkRepository: Lazy<NetworkRepository> = lazy {
+        return@lazy NetworkRepository(civicsApiService)
     }
 }
