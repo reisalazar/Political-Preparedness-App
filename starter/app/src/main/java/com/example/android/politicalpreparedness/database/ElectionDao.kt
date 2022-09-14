@@ -13,15 +13,15 @@ interface ElectionDao {
     suspend fun insert(election: Election)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertAll(elections : List<Election>)
+    suspend fun insertAll(elections: List<Election>)
 
     // Add select all election query
     @Query("SELECT * FROM election_table")
-    fun getAllElections(): List<Election>?
+    suspend fun getAllElections(): List<Election>?
 
     // Add select single election query
     @Query("SELECT * FROM election_table WHERE id=:id")
-    fun get(id:Long): Election
+    suspend fun get(id: Long): Election
 
     // Add delete query
     @Query("delete from election_table where id = :id")

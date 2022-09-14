@@ -6,14 +6,14 @@ apply plugin: 'kotlinx-serialization'
 apply plugin: 'androidx.navigation.safeargs'
 
 android {
-    compileSdkVersion 30
+    compileSdkVersion 31
     buildFeatures {
         dataBinding true
     }
     defaultConfig {
         applicationId 'com.example.android.politicalpreparedness'
         minSdkVersion 26
-        targetSdkVersion 30
+        targetSdkVersion 31
         versionCode 1
         versionName "1.0"
 
@@ -73,11 +73,16 @@ dependencies {
     implementation "com.squareup.moshi:moshi-adapters:$version_moshi"
 
     // Glide
-    //TODO: Add Glide Implementation
+    // Add Glide Implementation
+    implementation "com.github.bumptech.glide:glide:$version_glide"
+    implementation 'com.google.android.gms:play-services-maps:18.1.0'
+    annotationProcessor "com.github.bumptech.glide:compiler:$version_glide"
 
     //Room
-    implementation "androidx.room:room-runtime:$version_room"
-    kapt "androidx.room:room-compiler:$version_room"
+    implementation "androidx.room:room-runtime:2.4.0-rc01"
+    kapt "androidx.room:room-compiler:2.4.0-rc01"
+    implementation 'androidx.room:room-ktx:2.2.1'
+//    kapt "androidx.room:room-compiler:2.2.1"
 
     // Location
     implementation "com.google.android.gms:play-services-location:$version_play_services_location"
