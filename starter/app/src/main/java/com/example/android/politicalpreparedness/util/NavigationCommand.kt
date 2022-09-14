@@ -1,4 +1,4 @@
-package com.example.android.politicalpreparedness.base
+package com.example.android.politicalpreparedness.util
 
 import androidx.navigation.NavDirections
 

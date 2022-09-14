@@ -112,3 +112,8 @@ local.properties
 /.idea/modules/app/starter.app.unitTest.iml
 /.idea/modules/starter.iml
 /.idea/vcs.xml
+/.idea/libraries/Gradle__org_jetbrains_kotlin_kotlin_stdlib_1_3_72.xml
+/.idea/libraries/Gradle__org_jetbrains_kotlin_kotlin_stdlib_common_1_3_72.xml
+/.idea/libraries/Gradle__org_jetbrains_kotlinx_kotlinx_coroutines_android_1_3_0.xml
+/.idea/libraries/Gradle__org_jetbrains_kotlinx_kotlinx_coroutines_core_1_3_0.xml
+/.idea/navEditor.xml

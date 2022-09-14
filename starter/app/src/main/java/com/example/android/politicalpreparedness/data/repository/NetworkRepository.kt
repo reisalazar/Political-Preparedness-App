@@ -9,7 +9,7 @@ import com.example.android.politicalpreparedness.network.models.RepresentativeRe
 import com.example.android.politicalpreparedness.network.models.VoterInfoResponse
 import kotlinx.coroutines.Deferred
 
-class ElectionNetworkRepository(private val civicsApiService: CivicsApiService): NetworkDataSource {
+class NetworkRepository(private val civicsApiService: CivicsApiService): NetworkDataSource {
 
     override suspend fun getAllElections(): Result<List<Election>> {
         val response = civicsApiService.getUpcomingElections()
@@ -17,10 +17,10 @@ class ElectionNetworkRepository(private val civicsApiService: CivicsApiService):
             if (response.body() != null) {
                 Result.Success(response.body()!!.elections)
             } else {
-                Result.Error("No Elections Found", response.code())
+                Result.Error("Fail to get elections", response.code())
             }
         } else {
-            Result.Error("Failed to load data", response.code())
+            Result.Error("Failed to load elections", response.code())
         }
     }
 
@@ -30,10 +30,10 @@ class ElectionNetworkRepository(private val civicsApiService: CivicsApiService):
             if (response.body() != null) {
                 Result.Success(response.body()!!)
             } else {
-                Result.Error("No Voter Info Found", response.code())
+                Result.Error("failed to get voter info", response.code())
             }
         } else {
-            Result.Error("Failed to load data", response?.code())
+            Result.Error("failed to load voter info", response?.code())
         }
     }
 
