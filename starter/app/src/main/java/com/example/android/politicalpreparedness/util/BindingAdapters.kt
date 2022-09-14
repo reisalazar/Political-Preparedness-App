@@ -1,4 +1,4 @@
-package com.example.android.politicalpreparedness.representative.adapter
+package com.example.android.politicalpreparedness.util
 
 import android.view.View
 import android.widget.*
@@ -9,12 +9,12 @@ import com.bumptech.glide.Glide
 import com.example.android.politicalpreparedness.R
 import com.example.android.politicalpreparedness.election.adapter.ElectionListAdapter
 import com.example.android.politicalpreparedness.network.models.Election
+import com.example.android.politicalpreparedness.representative.adapter.RepresentativeListAdapter
 import com.example.android.politicalpreparedness.representative.model.Representative
-import com.example.android.politicalpreparedness.util.Status
 import java.util.*
 
 
-@BindingAdapter("profileImage")
+@BindingAdapter("fetchImage")
 fun fetchImage(view: ImageView, src: String?) {
     src?.let {
         val uri = src.toUri().buildUpon().scheme("https").build()

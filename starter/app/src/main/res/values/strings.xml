@@ -14,6 +14,10 @@
     <string name="zip">Zip</string>
     <string name="follow_election">Follow Election</string>
     <string name="unfollow_election">Unfollow Election</string>
+    <string name="img_representative_description">a photo of the representative</string>
+    <string name="a_image_of_the_facebook_logo">A image of the facebook logo</string>
+    <string name="a_image_of_twitter_logo">A image of Twitter logo</string>
+    <string name="a_image_representing_the_world_wide_web">A Image representing the World Wide Web</string>
 
     <!--  Add necessary string values -->
 

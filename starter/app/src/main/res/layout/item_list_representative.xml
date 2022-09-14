@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="representative"
+            type="com.example.android.politicalpreparedness.representative.model.Representative" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/representative_photo"
+            style="@style/img_style_representative"
+            app:fetchImage="@{representative.official.photoUrl}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:contentDescription="@string/img_representative_description"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/ic_profile"
+            tools:srcCompat="@tools:sample/avatars" />
+
+        <TextView
+            android:id="@+id/office_name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_small"
+            android:layout_marginTop="@dimen/margin_small"
+            android:text="@{representative.office.name}"
+            android:textAppearance="@style/TextAppearance.AppCompat.Small"
+            android:textStyle="bold"
+            app:layout_constraintStart_toEndOf="@+id/representative_photo"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Office Name" />
+
+        <TextView
+            android:id="@+id/official_name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_small"
+            android:text="@{representative.official.name}"
+            android:textAppearance="@style/TextAppearance.AppCompat.Small"
+            app:layout_constraintStart_toStartOf="@+id/office_name"
+            app:layout_constraintTop_toBottomOf="@+id/office_name"
+            tools:text="Official Name" />
+
+        <TextView
+            android:id="@+id/party_name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_small"
+            android:text="@{representative.official.party}"
+            android:textAppearance="@style/TextAppearance.AppCompat.Small"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/official_name"
+            app:layout_constraintTop_toBottomOf="@+id/official_name"
+            tools:text="Party Name" />
+
+        <ImageView
+            android:id="@+id/twitter_icon"
+            style="@style/img_style_address"
+            android:contentDescription="@string/a_image_of_twitter_logo"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:srcCompat="@drawable/ic_twitter" />
+
+        <ImageView
+            android:id="@+id/facebook_icon"
+            style="@style/img_style_address"
+            android:contentDescription="@string/a_image_of_the_facebook_logo"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/twitter_icon"
+            app:srcCompat="@drawable/ic_facebook" />
+
+        <ImageView
+            android:id="@+id/www_icon"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_marginEnd="@dimen/margin_small"
+            android:contentDescription="@string/a_image_representing_the_world_wide_web"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/facebook_icon"
+            app:srcCompat="@drawable/ic_www" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>
