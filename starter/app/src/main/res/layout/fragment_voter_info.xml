@@ -48,20 +48,24 @@
             tools:text="Election Information"
             style="@style/text_style_state_header" />
 
-        <!-- TODO: Add click binding to open web URL -->
+        <!--  Add click binding to open web URL -->
         <!--  Add visual styling and content -->
         <TextView
             android:id="@+id/tv_state_locations"
             tools:text="Voting Locations"
+            android:onClick="@{()-> viewModel.loadURLs(viewModel.voterInfo.state.get(0).electionAdministrationBody.votingLocationFinderUrl)}"
+            app:shouldShowView="@{viewModel.voterInfo.state.get(0).electionAdministrationBody.votingLocationFinderUrl}"
             app:layout_constraintStart_toStartOf="@id/tv_election_date"
             app:layout_constraintTop_toBottomOf="@id/tv_state_header"
             style="@style/text_style_state_locations" />
 
-        <!-- TODO: Add click binding to open web URL -->
+        <!--  Add click binding to open web URL -->
         <!--  Add visual styling and content -->
         <TextView
             android:id="@+id/tv_state_ballot"
             tools:text="Ballot Information"
+            android:onClick="@{()-> viewModel.loadURLs(viewModel.voterInfo.state.get(0).electionAdministrationBody.ballotInfoUrl)}"
+            app:shouldShowView="@{viewModel.voterInfo.state.get(0).electionAdministrationBody.ballotInfoUrl}"
             app:layout_constraintStart_toStartOf="@id/tv_election_date"
             app:layout_constraintTop_toBottomOf="@id/tv_state_locations"
             style="@style/text_style_ballot" />
@@ -72,23 +76,25 @@
             android:layout_height="wrap_content"
             app:constraint_referenced_ids="tv_state_correspondence_header,tv_address" />
 
-        <!-- TODO: Add visual styling and content -->
+        <!--  Add visual styling and content -->
         <TextView
             android:id="@+id/tv_state_correspondence_header"
             android:layout_width="wrap_content"
+            app:shouldShowView="@{viewModel.voterInfo.state.get(0).electionAdministrationBody.correspondenceAddress}"
             android:layout_height="wrap_content"
             app:layout_constraintStart_toStartOf="@id/tv_election_date"
             app:layout_constraintTop_toBottomOf="@id/tv_state_ballot" />
 
-        <!-- TODO: Add data binding -->
+        <!--  Add data binding -->
         <TextView
             android:id="@+id/tv_address"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:text="@{viewModel.voterInfo.state.get(0).electionAdministrationBody.correspondenceAddress.toFormattedString()}"
             app:layout_constraintStart_toStartOf="@id/tv_election_date"
             app:layout_constraintTop_toBottomOf="@id/tv_state_correspondence_header" />
 
-        <!-- TODO: Add button to save election to Room -->
+        <!--  Add button to save election to Room -->
 
         <Button
             android:id="@+id/btn_follow"
@@ -96,11 +102,23 @@
             android:layout_height="wrap_content"
             style="@style/btn_style"
             tools:text="@string/follow_election"
+            android:onClick="@{() -> (viewModel.isFollow(electionId))}"
             android:layout_margin="@dimen/margin_small"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             />
+        <ProgressBar
+            android:id="@+id/status_loading_wheel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:indeterminate="true"
+            android:visibility="gone"
+            app:loaderState="@{viewModel.status}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
