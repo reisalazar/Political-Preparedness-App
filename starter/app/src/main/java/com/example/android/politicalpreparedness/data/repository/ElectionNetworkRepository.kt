@@ -9,10 +9,10 @@ import com.example.android.politicalpreparedness.network.models.RepresentativeRe
 import com.example.android.politicalpreparedness.network.models.VoterInfoResponse
 import kotlinx.coroutines.Deferred
 
-class ElectionNetworkRepository(private val apiService: CivicsApiService): NetworkDataSource {
+class ElectionNetworkRepository(private val civicsApiService: CivicsApiService): NetworkDataSource {
 
-    override suspend fun getListOfElections(): Result<List<Election>> {
-        val response = apiService.getElectionsFromNetwork()
+    override suspend fun getAllElections(): Result<List<Election>> {
+        val response = civicsApiService.getUpcomingElections()
         return if (response.isSuccessful) {
             if (response.body() != null) {
                 Result.Success(response.body()!!.elections)
@@ -25,19 +25,19 @@ class ElectionNetworkRepository(private val apiService: CivicsApiService): Netwo
     }
 
     override suspend fun getVotersInfo(address: String, electionId: Long?): Result<VoterInfoResponse> {
-        val response = apiService.getVoterInfoFromNetwork(address, electionId)
-        return if (response.isSuccessful) {
+        val response = electionId?.let { civicsApiService.getVoterInfo(address, it) }
+        return if (response?.isSuccessful == true) {
             if (response.body() != null) {
                 Result.Success(response.body()!!)
             } else {
                 Result.Error("No Voter Info Found", response.code())
             }
         } else {
-            Result.Error("Failed to load data", response.code())
+            Result.Error("Failed to load data", response?.code())
         }
     }
 
-    override fun getRepresentativesFromNetworkAsync(address: Address): Deferred<RepresentativeResponse> {
-        return apiService.getRepresentativesFromNetworkAsync(address.toFormattedString())
+    override fun getAllRepresentativesAsync(address: Address): Deferred<RepresentativeResponse> {
+        return civicsApiService.getAllRepresentativesAsync(address.toFormattedString())
     }
 }

@@ -49,7 +49,7 @@ interface CivicsApiService {
 
     // Add representatives API Call
     @GET("representatives")
-    suspend fun getRepresentatives(@Query("address") address: String): Deferred<RepresentativeResponse>
+    fun getAllRepresentativesAsync(@Query("address") address: String): Deferred<RepresentativeResponse>
 
 }
 
