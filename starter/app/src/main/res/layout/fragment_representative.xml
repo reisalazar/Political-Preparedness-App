@@ -25,17 +25,18 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <!-- TODO: Add data binding value -->
+        <!--  Add data binding value -->
         <!--  Add visual styling and content -->
         <EditText
             android:id="@+id/et_address_line_1"
             style="@style/et_address_style"
             android:autofillHints="@string/address_line_1"
             android:hint="@string/address_line_1"
+            android:text="@={viewModel.addressLine1}"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tv_search_title" />
 
-        <!-- TODO: Add data binding value -->
+        <!--  Add data binding value -->
         <!--  Add visual styling and content -->
         <EditText
             android:id="@+id/et_address_line_2"
@@ -44,10 +45,11 @@
             android:layout_height="0dp"
             android:autofillHints="@string/address_line_2"
             android:hint="@string/address_line_2"
+            android:text="@={viewModel.addressLine2}"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/et_address_line_1" />
 
-        <!-- TODO: Add data binding value -->
+        <!--  Add data binding value -->
         <!--  Add visual styling and content -->
         <EditText
             android:id="@+id/et_city"
@@ -56,30 +58,34 @@
             android:layout_height="wrap_content"
             android:autofillHints="@string/city"
             android:hint="@string/city"
+            android:text="@={viewModel.city}"
             app:layout_constraintEnd_toStartOf="@id/spinner_state"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/et_address_line_2" />
 
         <!--  Add default values from provided resources  -->
-        <!-- TODO: Add data binding value -->
+        <!--  Add data binding value -->
         <!--  Add visual styling and content -->
         <Spinner
             android:id="@+id/spinner_state"
+            setNewValue="@{viewModel.state}"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:inputType="textPostalAddress"
+            android:selectedItemPosition="@={viewModel.selectedItem}"
             app:layout_constraintBottom_toBottomOf="@id/et_city"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/et_city"
             app:layout_constraintTop_toTopOf="@id/et_city" />
 
-        <!-- TODO: Add data binding value -->
+        <!--  Add data binding value -->
         <!--  Add visual styling and content -->
         <EditText
             android:id="@+id/et_zip"
             style="@style/zip_style"
-            android:hint="@string/zip"
             android:autofillHints="@string/zip"
+            android:hint="@string/zip"
+            android:text="@={viewModel.zip}"
             app:layout_constraintEnd_toEndOf="@id/et_city"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/et_city" />

@@ -1,26 +1,96 @@
 package com.example.android.politicalpreparedness.representative
 
+import android.app.Application
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.example.android.politicalpreparedness.data.repository.NetworkRepository
+import com.example.android.politicalpreparedness.network.models.Address
+import com.example.android.politicalpreparedness.representative.model.Representative
+import com.example.android.politicalpreparedness.util.Status
+import kotlinx.coroutines.launch
 
-class RepresentativeViewModel: ViewModel() {
+class RepresentativeViewModel(
+    private val networkRepository: Lazy<NetworkRepository>,
+    ) : ViewModel() {
 
-    //TODO: Establish live data for representatives and address
+    // Establish live data for representatives and address
+    val addressLine1 = MutableLiveData<String>()
+    val addressLine2 = MutableLiveData<String>()
+    val city = MutableLiveData<String>()
+    val state = MutableLiveData<String>()
+    val zip = MutableLiveData<String>()
 
-    //TODO: Create function to fetch representatives from API from a provided address
+    private val _representatives = MutableLiveData<List<Representative>>()
+    val representatives: LiveData<List<Representative>>
+        get() = _representatives
 
-    /**
-     *  The following code will prove helpful in constructing a representative from the API. This code combines the two nodes of the RepresentativeResponse into a single official :
+    private val _showSnackBar = MutableLiveData<String>()
+    val showSnackBar: LiveData<String>
+        get() = _showSnackBar
 
-    val (offices, officials) = getRepresentativesDeferred.await()
-    _representatives.value = offices.flatMap { office -> office.getRepresentatives(officials) }
+    val selectedItem = MutableLiveData<Int>()
 
-    Note: getRepresentatives in the above code represents the method used to fetch data from the API
-    Note: _representatives in the above code represents the established mutable live data housing representatives
+    private val _status = MutableLiveData<Status>()
+    val status: LiveData<Status>
+        get() = _status
 
-     */
 
-    //TODO: Create function get address from geo location
+    // Create function to fetch representatives from API from a provided address
+    fun fetchRepresentatives() {
+        viewModelScope.launch {
+            Status.LOADING
+            kotlin.runCatching {
+                val result =
+                    networkRepository.value.getAllRepresentativesAsync(getCurrentAddress()).await()
+                _representatives.value = result.offices.flatMap {
+                    it.getRepresentatives(result.officials)
+                }
+                Status.SUCCESS
+            }.onFailure {
+                _showSnackBar.value = "Failed to fetch Representatives"
+                Status.ERROR("Error on loading Representatives")
+            }
+        }
+    }
 
-    //TODO: Create function to get address from individual fields
+
+    // Create function get address from geo location
+    fun getAddressLocation(address: Address) {
+        addressLine1.value = address.line1
+        addressLine2.value = address.line2
+        city.value = address.city
+        state.value = address.state
+        zip.value = address.zip
+    }
+
+    private fun getCurrentAddress() = Address(
+        addressLine1.value.toString(),
+        addressLine2.value.toString(),
+        city.value.toString(),
+        state.value.toString(),
+        zip.value.toString()
+    )
+
+
+    // Create function to get address from individual fields
+    private fun validateEnteredData(): Boolean {
+        if (addressLine1.value.isNullOrBlank()) {
+            _showSnackBar.value = "You need to set a Address"
+            return false
+        }
+        if (city.value.isNullOrBlank()) {
+            _showSnackBar.value = "You need to set a city"
+
+            return false
+        }
+        if (zip.value.isNullOrBlank()) {
+            _showSnackBar.value = "You need to set a Zip Code"
+            return false
+        }
+        return true
+    }
+
 
 }
