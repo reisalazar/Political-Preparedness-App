@@ -3,7 +3,6 @@ package com.example.android.politicalpreparedness.representative
 import android.app.Application
 import androidx.lifecycle.*
 import com.example.android.politicalpreparedness.R
-import com.example.android.politicalpreparedness.data.repository.NetworkRepository
 import com.example.android.politicalpreparedness.network.models.Address
 import com.example.android.politicalpreparedness.representative.model.Representative
 import com.example.android.politicalpreparedness.util.Status

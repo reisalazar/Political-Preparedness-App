@@ -1,9 +1,7 @@
 package com.example.android.politicalpreparedness.util
 
-import com.example.android.politicalpreparedness.data.repository.LocalRepository
-import com.example.android.politicalpreparedness.data.repository.NetworkRepository
-import com.example.android.politicalpreparedness.database.ElectionDao
-import com.example.android.politicalpreparedness.database.ElectionDatabase
+import com.example.android.politicalpreparedness.data.ElectionDao
+import com.example.android.politicalpreparedness.data.ElectionDatabase
 import com.example.android.politicalpreparedness.network.CivicsApiService
 
 object ObjectServices {

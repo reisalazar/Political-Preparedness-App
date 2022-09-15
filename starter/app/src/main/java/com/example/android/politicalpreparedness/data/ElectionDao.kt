@@ -1,4 +1,4 @@
-package com.example.android.politicalpreparedness.database
+package com.example.android.politicalpreparedness.data
 
 import androidx.lifecycle.LiveData
 import androidx.room.*
@@ -17,15 +17,15 @@ interface ElectionDao {
 
     // Add select all election query
     @Query("SELECT * FROM election_table")
-    suspend fun getAllElections(): List<Election>?
+     fun getAllElections(): LiveData<List<Election>>
 
     // Add select single election query
     @Query("SELECT * FROM election_table WHERE id=:id")
-    suspend fun get(id: Long): Election?
+    suspend fun get(id: Int): Election?
 
     // Add delete query
     @Query("delete from election_table where id = :id")
-    suspend fun delete(id: Long)
+    suspend fun delete(id: Election)
 
     // Add clear query
     @Query("DELETE FROM election_table")

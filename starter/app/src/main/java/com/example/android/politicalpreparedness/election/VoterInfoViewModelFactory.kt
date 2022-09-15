@@ -2,8 +2,6 @@ package com.example.android.politicalpreparedness.election
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.example.android.politicalpreparedness.data.repository.LocalRepository
-import com.example.android.politicalpreparedness.data.repository.NetworkRepository
 
 // Create Factory to generate VoterInfoViewModel with provided election datasource
 @Suppress("UNCHECKED_CAST")

@@ -4,11 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.android.politicalpreparedness.data.Result
-import com.example.android.politicalpreparedness.data.repository.LocalRepository
-import com.example.android.politicalpreparedness.data.repository.NetworkRepository
 import com.example.android.politicalpreparedness.network.models.Election
-import com.example.android.politicalpreparedness.util.NavigationCommand
 import com.example.android.politicalpreparedness.util.SingleLiveEvent
 import com.example.android.politicalpreparedness.util.Status
 import kotlinx.coroutines.launch

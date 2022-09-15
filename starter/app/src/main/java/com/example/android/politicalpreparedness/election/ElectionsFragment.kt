@@ -12,7 +12,6 @@ import com.example.android.politicalpreparedness.databinding.FragmentElectionBin
 import com.example.android.politicalpreparedness.election.adapter.ElectionListAdapter
 import com.example.android.politicalpreparedness.election.adapter.ElectionListener
 import com.example.android.politicalpreparedness.network.models.Election
-import com.example.android.politicalpreparedness.util.NavigationCommand
 import com.example.android.politicalpreparedness.util.ObjectServices
 import com.example.android.politicalpreparedness.util.Status
 import com.google.android.material.snackbar.Snackbar
