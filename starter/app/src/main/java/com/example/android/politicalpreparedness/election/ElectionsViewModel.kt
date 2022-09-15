@@ -1,82 +1,74 @@
 package com.example.android.politicalpreparedness.election
 
+import android.app.Application
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.android.politicalpreparedness.R
+import com.example.android.politicalpreparedness.data.UpcomingElectionDatabase
+import com.example.android.politicalpreparedness.data.SavedElectionDatabase
+import com.example.android.politicalpreparedness.data.repository.ElectionsRepository
+import com.example.android.politicalpreparedness.network.CivicsApiInstance
+import com.example.android.politicalpreparedness.network.models.Division
 import com.example.android.politicalpreparedness.network.models.Election
-import com.example.android.politicalpreparedness.util.SingleLiveEvent
-import com.example.android.politicalpreparedness.util.Status
+     import com.udacity.project4.base.BaseViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.util.*
 
 // Construct ViewModel and provide election datasource
-class ElectionsViewModel(
-    private val localRepository: Lazy<LocalRepository>,
-    private val networkRepository: Lazy<NetworkRepository>
+class ElectionsViewModel(app: Application) : BaseViewModel(app) {
 
-) : ViewModel() {
-    private val showToast: SingleLiveEvent<String> = SingleLiveEvent()
+    private val repository = ElectionsRepository(
+        UpcomingElectionDatabase.getInstance(app),
+        SavedElectionDatabase.getInstance(app), CivicsApiInstance
+    )
 
     // Create live data val for upcoming elections
-    private var _upcomingElections = MutableLiveData<List<Election>>()
-    val upcomingElections: LiveData<List<Election>>
-        get() = _upcomingElections
+    val upcomingElections = repository.upcomingElections
 
     // Create live data val for saved elections
-    private var _savedElections = MutableLiveData<List<Election>>()
-    val savedElections: LiveData<List<Election>>
-        get() = _savedElections
+    val savedElections = repository.savedElections
 
-    private val _status = MutableLiveData<Status>()
-    val status: LiveData<Status>
-        get() = _status
+    private val _mockElections = MutableLiveData<List<Election>>()
 
     // Create functions to navigate to saved or upcoming election voter info
-    val navigationCommand: SingleLiveEvent<NavigationCommand> = SingleLiveEvent()
+    private fun refreshElections() {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                repository.refreshElections()
 
-    // Create val and functions to populate live data for upcoming elections from the API
-    // and saved elections from local database
-    fun fetchUpcomingElection() {
-        viewModelScope.launch {
-            _status.postValue(Status.LOADING)
-            kotlin.runCatching {
-                networkRepository.value.getAllElections()
-            }.onSuccess {
-                when (it) {
-                    is Result.Success -> {
-                        _status.postValue(Status.SUCCESS)
-                        _upcomingElections.postValue(it.data)
-                    }
-                    is Result.Error -> {
-                        _status.postValue(Status.ERROR("Error in fetch Upcoming Election"))
-                        showToast.value = "Failed to get elections from network"
-                    }
-                }
-            }.onFailure {
-                _status.postValue(Status.ERROR("Failed at the network repository get all elections"))
+            } catch (exception: Exception) {
+                showSnackBarInt.postValue(R.string.no_connection)
             }
         }
     }
 
-    fun fetchSavedElection() {
-        viewModelScope.launch {
-            kotlin.runCatching {
-                localRepository.value.getAllElections()
-            }.onSuccess {
-                when (it) {
-                    is Result.Success -> {
-                        _status.postValue(Status.SUCCESS)
-                        _upcomingElections.postValue(it.data)
-                    }
-                    is Result.Error -> {
-                        _status.postValue(Status.ERROR("Error in fetch Saved Election"))
-                        showToast.value = "Failed to get elections from saved elections"
-                    }
-                }
-            }.onFailure {
-                _status.postValue(Status.ERROR("Failed at the local repository get all elections"))
+    private fun mockElections() {
+        val mockElections = mutableListOf<Election>()
+        var count = 1
+        if (count <= 5) {
+            val data = Election(
+                count,
+                "name:$count",
+                Date(),
+                Division("id", "US", "state")
+            )
+            mockElections.add(data)
+            ++count
+        }
+        _mockElections.postValue(mockElections)
+    }
 
-            }
+    // Create val and functions to populate live data for upcoming elections from the API
+    // and saved elections from local database
+    private val mockData: Boolean = false
+
+    init {
+        if (mockData) {
+            mockElections()
+        } else {
+            refreshElections()
         }
     }
 }

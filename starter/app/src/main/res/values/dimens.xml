@@ -4,6 +4,7 @@
     <dimen name="margin_medium">16dp</dimen>
     <dimen name="margin_small">8dp</dimen>
     <dimen name="margin_big">32dp</dimen>
+    <dimen name="tiny_margin">4dp</dimen>
 
 
     <!--  Add necessary dimension values -->s

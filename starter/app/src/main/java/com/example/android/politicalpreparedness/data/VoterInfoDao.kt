@@ -10,8 +10,8 @@ import com.example.android.politicalpreparedness.network.models.VoterInfo
 interface VoterInfoDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insert(voterInfo: VoterInfo)
+    fun insert(voterInfo: VoterInfo)
 
     @Query("SELECT * FROM voter_info_table WHERE id = :id")
-    suspend fun get(id: Int) : VoterInfo?
+    fun get(id: Int) : VoterInfo?
 }

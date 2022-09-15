@@ -3,98 +3,70 @@ package com.example.android.politicalpreparedness.representative
 import android.app.Application
 import androidx.lifecycle.*
 import com.example.android.politicalpreparedness.R
+import com.example.android.politicalpreparedness.data.repository.RepresentativesRepository
+import com.example.android.politicalpreparedness.network.CivicsApiInstance
 import com.example.android.politicalpreparedness.network.models.Address
-import com.example.android.politicalpreparedness.representative.model.Representative
-import com.example.android.politicalpreparedness.util.Status
+import com.udacity.project4.base.BaseViewModel
 import kotlinx.coroutines.launch
 
-class RepresentativeViewModel(
-    private val networkRepository: Lazy<NetworkRepository>,
-    val app: Application
-) : ViewModel() {
+class RepresentativesViewModel(app: Application): BaseViewModel(app) {
+    private val repository = RepresentativesRepository(CivicsApiInstance)
 
     // Establish live data for representatives and address
-    val addressLine1 = MutableLiveData<String>()
-    val addressLine2 = MutableLiveData<String>()
-    val city = MutableLiveData<String>()
-    val state = MediatorLiveData<String>()
-    val zip = MutableLiveData<String>()
+    val representatives = repository.representatives
 
-    private val _representatives = MutableLiveData<List<Representative>>()
-    val representatives: LiveData<List<Representative>>
-        get() = _representatives
+    private val _address = MutableLiveData<Address>()
+    val address: LiveData<Address>
+        get() = _address
 
-    private val _showSnackBar = MutableLiveData<Int>()
-    val showSnackBar: LiveData<Int>
-        get() = _showSnackBar
+    private val _states = MutableLiveData<List<String>>()
+    val states: LiveData<List<String>>
+        get() = _states
 
-    val selectedItem = MutableLiveData<Int>()
 
-    private val _status = MutableLiveData<Status>()
-    val status: LiveData<Status>
-        get() = _status
 
     init {
-        state.addSource(selectedItem) {
-            state.value = app.resources.getStringArray(R.array.states)[it]
-        }
+        _address.value = Address("", "","","Mississippi","")
+        _states.value = app.resources.getStringArray(R.array.states).toList()
     }
 
 
+    val selectedStateIndex = MutableLiveData<Int>()
+
     // Create function to fetch representatives from API from a provided address
-    fun fetchRepresentatives() {
+    private fun refreshRepresentatives() {
         viewModelScope.launch {
-            Status.LOADING
-            kotlin.runCatching {
-                val result =
-                    networkRepository.value.getAllRepresentativesAsync(getCurrentAddress()).await()
-                _representatives.value = result.offices.flatMap {
-                    it.getRepresentatives(result.officials)
-                }
-                Status.SUCCESS
-            }.onFailure {
-                _showSnackBar.value = R.string.snack_failed_representatives
-                Status.ERROR("Error on loading Representatives")
+            try {
+                address.value!!.state = getSelectedState(selectedStateIndex.value!!)
+                val addressStr = address.value!!.toFormattedString()
+                repository.refreshRepresentatives(addressStr)
+
+            } catch (exception: Exception) {
+                showSnackBarInt.postValue(R.string.failed_address)
             }
         }
+    }
+    fun onSearchButtonClick() {
+        refreshRepresentatives()
     }
 
 
     // Create function get address from geo location
-    fun getAddressLocation(address: Address) {
-        addressLine1.value = address.line1
-        addressLine2.value = address.line2
-        city.value = address.city
-        state.value = address.state
-        zip.value = address.zip
+    fun refreshByCurrentLocation(address: Address) {
+
+        val stateIndex = _states.value?.indexOf(address.state)
+        if (stateIndex != null && stateIndex >= 0) {
+            selectedStateIndex.value = stateIndex
+            _address.value = address
+            refreshRepresentatives()
+
+        } else {
+            showSnackBarInt.value = R.string.failed_representatives
+        }
     }
-
-    private fun getCurrentAddress() = Address(
-        addressLine1.value.toString(),
-        addressLine2.value.toString(),
-        city.value.toString(),
-        state.value.toString(),
-        zip.value.toString()
-    )
-
-
+    private fun getSelectedState(stateIndex: Int) : String {
+        return states.value!!.toList()[stateIndex]
+    }
     // Create function to get address from individual fields
-    private fun validateEnteredData(): Boolean {
-        if (addressLine1.value.isNullOrBlank()) {
-            _showSnackBar.value = R.string.snack_failed_address
-            return false
-        }
-        if (city.value.isNullOrBlank()) {
-            _showSnackBar.value = R.string.snack_failed_city
-
-            return false
-        }
-        if (zip.value.isNullOrBlank()) {
-            _showSnackBar.value = R.string.snack_failed_zip
-            return false
-        }
-        return true
-    }
-
 
 }

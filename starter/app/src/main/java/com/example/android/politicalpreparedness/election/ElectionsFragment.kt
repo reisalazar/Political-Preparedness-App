@@ -4,35 +4,35 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
+import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
+import com.example.android.politicalpreparedness.R
 import com.example.android.politicalpreparedness.databinding.FragmentElectionBinding
 import com.example.android.politicalpreparedness.election.adapter.ElectionListAdapter
 import com.example.android.politicalpreparedness.election.adapter.ElectionListener
-import com.example.android.politicalpreparedness.network.models.Election
-import com.example.android.politicalpreparedness.util.ObjectServices
-import com.example.android.politicalpreparedness.util.Status
-import com.google.android.material.snackbar.Snackbar
+import com.udacity.project4.base.BaseFragment
 
 
-class ElectionsFragment : Fragment() {
+class ElectionsFragment : BaseFragment() {
 
     // Declare ViewModel
-    private val viewModel by viewModels<ElectionsViewModel> {
-        ElectionsViewModelFactory(
-            ObjectServices.localRepository,
-            ObjectServices.networkRepository
-        )
-    }
+    private lateinit var binding: FragmentElectionBinding
+    private val navController by lazy { findNavController() }
+    override val viewModel: ElectionsViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val binding = FragmentElectionBinding.inflate(inflater)
+        binding =
+            DataBindingUtil.inflate(
+                inflater,
+                R.layout.fragment_election,
+                container,
+                false
+            )
         // Add binding values
         binding.lifecycleOwner = this
         // Add ViewModel values and create ViewModel
@@ -42,40 +42,30 @@ class ElectionsFragment : Fragment() {
 
         // Link elections to voter info
         // Initiate recycler adapters
-        val electionAdapter = ElectionListAdapter(object : ElectionListener {
-            override fun onClick(election: Election) {
-                this@ElectionsFragment.findNavController()
-                    .navigate(
-                        ElectionsFragmentDirections.actionElectionsFragmentToVoterInfoFragment(
-                            election.id,
-                            election.division
-                        )
-                    )
-            }
-        })
-        val savedElectionAdapter = ElectionListAdapter(object : ElectionListener {
-            override fun onClick(election: Election) {
-                viewModel.navigationCommand.value = NavigationCommand.To(
-                    ElectionsFragmentDirections.actionElectionsFragmentToVoterInfoFragment(
-                        election.id, election.division
-                    )
-                )
-            }
-        })
         // Populate recycler adapters
-        binding.upcomingElectionsRecyclerView.adapter = electionAdapter
-        binding.savedElectionsRecyclerView.adapter = savedElectionAdapter
 
-        viewModel.fetchUpcomingElection()
-        viewModel.fetchSavedElection()
-
-        viewModel.status.observe(viewLifecycleOwner, Observer {
-            if (it is Status.ERROR) {
-                it.message?.let { message ->
-                    Snackbar.make(binding.root, message, Snackbar.LENGTH_SHORT).show()
-                }
-            }
+        //Upcoming Elections
+        val upcomingElectionAdapter = ElectionListAdapter(ElectionListener { election ->
+            navController.navigate(
+                ElectionsFragmentDirections.actionElectionsFragmentToVoterInfoFragment(election)
+            )
         })
+        binding.upcomingElectionsRecyclerView.adapter = upcomingElectionAdapter
+        viewModel.upcomingElections.observe(viewLifecycleOwner) {
+            upcomingElectionAdapter.submitList(it)
+        }
+
+        //Saved Elections
+        val savedElectionAdapter = ElectionListAdapter(ElectionListener { election ->
+            navController.navigate(
+                ElectionsFragmentDirections.actionElectionsFragmentToVoterInfoFragment(election))
+        })
+
+        binding.savedElectionsRecyclerView.adapter = savedElectionAdapter
+        viewModel.savedElections.observe(viewLifecycleOwner) {
+            savedElectionAdapter.submitList(it)
+        }
+
         return binding.root
     }
 

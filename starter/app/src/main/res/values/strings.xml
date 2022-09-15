@@ -13,8 +13,8 @@
     <string name="address_line_2">Address Line 2</string>
     <string name="city">City</string>
     <string name="zip">Zip</string>
-    <string name="snack_failed_representatives">"Failed to fetch Representatives"</string>
-    <string name="snack_failed_address">""You need to set a Address""</string>
+    <string name="failed_representatives">"Failed to fetch Representatives"</string>
+    <string name="failed_address">""You need to set a Address""</string>
     <string name="follow_election">Follow Election</string>
     <string name="unfollow_election">Unfollow Election</string>
     <string name="img_representative_description">a photo of the representative</string>
@@ -22,6 +22,8 @@
     <string name="a_image_of_twitter_logo">A image of Twitter logo</string>
     <string name="a_image_representing_the_world_wide_web">A Image representing the World Wide Web</string>
     <string name="no_connection">Please connect to the Internet to continue</string>
+    <string name="failed_to_load_url_to_browser">failed to load URL to Browser</string>
+    <string name="failed_location_permited">You need to enable Location on device</string>
 
     <!--  Add necessary string values -->
 

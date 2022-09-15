@@ -94,8 +94,8 @@
     </style>
 
     <style name="img_style_representative">
-        <item name="android:layout_width">70dp</item>
-        <item name="android:layout_height">70dp</item>
+        <item name="android:layout_width">72dp</item>
+        <item name="android:layout_height">72dp</item>
         <item name="android:layout_margin">@dimen/margin_small</item>
         <item name="android:scaleType">centerCrop</item>
         <item name="android:contentDescription">@string/img_representative_description</item>
@@ -122,6 +122,29 @@
         <item name="android:layout_marginTop">@dimen/margin_small</item>
         <item name="android:textAppearance">@style/TextAppearance.AppCompat.Headline</item>
         <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="tv_office_style">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginStart">@dimen/margin_small</item>
+        <item name="android:layout_marginTop">@dimen/margin_small</item>
+        <item name="android:textAppearance">@style/TextAppearance.AppCompat.Small</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="tv_official_name_style">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">@dimen/margin_small</item>
+        <item name="android:textAppearance">@style/TextAppearance.AppCompat.Small</item>
+    </style>
+
+    <style name="tv_party_name_style">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">@dimen/margin_small</item>
+        <item name="android:textAppearance">@style/TextAppearance.AppCompat.Small</item>
     </style>
 
 </resources>

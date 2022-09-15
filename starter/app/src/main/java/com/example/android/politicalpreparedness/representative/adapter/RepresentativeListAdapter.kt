@@ -13,7 +13,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.android.politicalpreparedness.R
 import com.example.android.politicalpreparedness.databinding.ItemListRepresentativeBinding
 import com.example.android.politicalpreparedness.network.models.Channel
-import com.example.android.politicalpreparedness.representative.model.Representative
+import com.example.android.politicalpreparedness.network.models.Representative
 
 class RepresentativeListAdapter :
     ListAdapter<Representative, RepresentativeViewHolder>(RepresentativeDiffCallback()) {

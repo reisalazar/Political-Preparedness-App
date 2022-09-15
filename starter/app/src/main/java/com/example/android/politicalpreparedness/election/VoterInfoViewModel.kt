@@ -1,92 +1,88 @@
 package com.example.android.politicalpreparedness.election
 
+import android.app.Application
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.android.politicalpreparedness.network.models.Division
-import com.example.android.politicalpreparedness.network.models.VoterInfoResponse
-import com.example.android.politicalpreparedness.util.SingleLiveEvent
-import com.example.android.politicalpreparedness.util.Status
+import com.example.android.politicalpreparedness.R
+import com.example.android.politicalpreparedness.data.SavedElectionDatabase
+import com.example.android.politicalpreparedness.data.VoterInfoDatabase
+import com.example.android.politicalpreparedness.data.repository.VoterInfoRepository
+import com.example.android.politicalpreparedness.network.CivicsApiInstance
+import com.example.android.politicalpreparedness.network.models.Election
+import com.example.android.politicalpreparedness.network.models.VoterInfo
+import com.udacity.project4.base.BaseViewModel
 import kotlinx.coroutines.launch
 
-class VoterInfoViewModel(
-    private val LocalRepository: Lazy<LocalRepository>,
-    private val networkRepository: Lazy<NetworkRepository>
-) : ViewModel() {
+class VoterInfoViewModel(app: Application): BaseViewModel(app) {
 
-
-    private val showToast: SingleLiveEvent<String> = SingleLiveEvent()
+    private val repository = VoterInfoRepository(
+        VoterInfoDatabase.getInstance(app),
+        SavedElectionDatabase.getInstance(app),
+        CivicsApiInstance
+    )
+    val voterInfo = repository.voterInfo
 
     // Add live data to hold voter info
-    private var _voterInfo = MutableLiveData<VoterInfoResponse>()
-    val voterInfo: LiveData<VoterInfoResponse>
-        get() = _voterInfo
+    private val _selectedElection = MutableLiveData<Election>()
+    val selectedElection : LiveData<Election>
+        get() = _selectedElection
 
-    private val _isFollow = MutableLiveData<Boolean>()
-    val isFollow: LiveData<Boolean>
-        get() = _isFollow
+    private val _isElectionSaved = MutableLiveData<Boolean?>()
+    val isElectionSaved : LiveData<Boolean?>
+        get() = _isElectionSaved
 
-    private val _url = MutableLiveData<String>()
-    val url: LiveData<String>
-        get() = _url
+    private val mockData = true
+    val mockVoterInfo = MutableLiveData<VoterInfo>()
 
-    private val _status = MutableLiveData<Status>()
-    val status: LiveData<Status>
-        get() = _status
 
     // Add var and methods to populate voter info
-    fun fetchVoterInfo(division: Division, id: Long) {
+    fun refresh(election: Election) {
+        _selectedElection.value = election
+        refreshIsElectionSaved(election)
+        refreshVoterInfo(election)
+    }
+    private fun refreshIsElectionSaved(data: Election) {
         viewModelScope.launch {
-            _status.value = Status.LOADING
-            if (division.state.isNotEmpty() && division.country.isNotEmpty()) {
-                val address = "${division.country},${division.state}"
-                when (val result = networkRepository.value.getVotersInfo(address, id)) {
-                    is Result.Success -> {
-                        _status.value = Status.SUCCESS
-                        _voterInfo.value = result.data
-                    }
-                    is Result.Error -> {
-                        _status.value = Status.ERROR("Error in fetch Voter info")
-                        showToast.value = "Failed to get voter info"
-                    }
-                }
-            } else {
-                _status.value = Status.ERROR("Error in load division country and state")
-                showToast.value = "Failed to get division country and state"
+            try {
+                val savedElection = repository.getSavedElection(data.id)
+                _isElectionSaved.postValue(savedElection != null)
+
+            } catch (e: Exception) {
+                e.printStackTrace()
             }
         }
     }
 
+
     // Add var and methods to support loading URLs
-    fun loadURLs(url: String) {
-        _url.value = url
+    private fun refreshVoterInfo(data: Election) {
+        viewModelScope.launch {
+            try {
+                val state = if(data.division.state.isEmpty()) "ny" else data.division.state
+                val address = "${state},${data.division.country}"
+
+                repository.refreshVoterInfo(address, data.id)
+                repository.loadVoterInfo(data.id)
+
+            } catch (e: Exception) {
+                e.printStackTrace()
+                showSnackBarInt.postValue(R.string.no_connection)
+                repository.loadVoterInfo(data.id)
+            }
+        }
     }
 
     // Add var and methods to save and remove elections to local database
-    fun electionFollow(electionId: Long) {
+    fun onFollowButtonClick() {
         viewModelScope.launch {
-            kotlin.runCatching {
-                LocalRepository.value.getElection(electionId)
-            }.onSuccess {
-                when (it) {
-                    is Result.Success -> {
-                        LocalRepository.value.deleteElection(electionId)
-                        _isFollow.value = false
-                    }
-                    is Result.Error -> {
-                        if (voterInfo.value != null) {
-                            LocalRepository.value.insertElection(voterInfo.value?.election!!)
-                            _isFollow.value = true
-                        } else {
-                            _status.value = Status.ERROR("Error on follow the Election")
-                            _isFollow.value = false
-                        }
-                    }
+            _selectedElection.value?.let {
+                if(isElectionSaved.value == true) {
+                    repository.deleteSavedElection(it)
+                } else {
+                    repository.insertSavedElection(it)
                 }
-            }.onFailure {
-                _status.value = Status.ERROR("Error in getting election by id from repository")
-                showToast.value = "Failed to get election from repository"
+                refreshIsElectionSaved(it)
             }
         }
     }
@@ -95,21 +91,17 @@ class VoterInfoViewModel(
      * Hint: The saved state can be accomplished in multiple ways. It is directly related to how elections are saved/removed from the database.
      */
     // cont'd -- Populate initial state of save button to reflect proper action based on election saved status
-    fun populateState(electionId: Long) {
-        viewModelScope.launch {
-            LocalRepository.value.getElection(electionId).runCatching {
-                when (this) {
-                    is Result.Error -> {
-                        _isFollow.value = false
-                    }
-                    is Result.Success -> {
-                        _isFollow.value = true
-                    }
-                }
-            }.onFailure {
-                _status.value = Status.ERROR("Error in Loading page")
-            }
+    init {
+        if(mockData) {
+            val data = VoterInfo(
+                2000,
+                "State XYZ",
+                "",
+                "")
+            mockVoterInfo.postValue(data)
         }
+
+        _isElectionSaved.value = null
     }
 
 }

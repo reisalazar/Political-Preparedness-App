@@ -9,6 +9,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.example.android.politicalpreparedness.R
 import com.example.android.politicalpreparedness.network.models.VoterInfo
+import java.util.*
 
 @BindingAdapter("electionTitle")
 fun bindElectionTitle(view: TextView, voterInfo: VoterInfo?) {
@@ -44,4 +45,8 @@ fun fetchImage(view: ImageView, src: String?) {
             .circleCrop()
             .into(view)
     }
+}
+@BindingAdapter("dateText")
+fun bindFormatDate(textView: TextView, date: Date?) {
+    textView.text = date?.toString()
 }

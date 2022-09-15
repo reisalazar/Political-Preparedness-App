@@ -3,7 +3,7 @@ package com.example.android.politicalpreparedness.data.repository
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.android.politicalpreparedness.network.CivicsApiInstance
-import com.example.android.politicalpreparedness.representative.model.Representative
+import com.example.android.politicalpreparedness.network.models.Representative
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 

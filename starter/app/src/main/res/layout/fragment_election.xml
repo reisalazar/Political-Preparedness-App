@@ -26,7 +26,6 @@
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/upcoming_elections_recycler_view"
-            app:electionAdapter="@{viewModel.upcomingElections}"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintBottom_toTopOf="@+id/tv_saved_elections_title"
             app:layout_constraintEnd_toEndOf="parent"
@@ -49,23 +48,11 @@
             android:id="@+id/saved_elections_recycler_view"
             style="@style/rv_style_election"
             android:layout_marginBottom="@dimen/margin_small"
-            app:electionAdapter="@{viewModel.savedElections}"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tv_saved_elections_title"
             tools:listitem="@layout/item_list_election" />
-
-        <ProgressBar
-            android:id="@+id/status_loading_wheel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:progressStatus="@{viewModel.status}" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

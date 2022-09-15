@@ -7,12 +7,14 @@
 
         <variable
             name="representative"
-            type="com.example.android.politicalpreparedness.representative.model.Representative" />
+            type="com.example.android.politicalpreparedness.network.models.Representative" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/tiny_margin"
+        android:layout_marginBottom="@dimen/tiny_margin">
 
         <ImageView
             android:id="@+id/representative_photo"
@@ -23,40 +25,28 @@
             android:contentDescription="@string/img_representative_description"
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/ic_profile"
-            tools:srcCompat="@tools:sample/avatars" />
+            tools:srcCompat="@drawable/ic_profile" />
 
         <TextView
             android:id="@+id/office_name"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/margin_small"
-            android:layout_marginTop="@dimen/margin_small"
             android:text="@{representative.office.name}"
-            android:textAppearance="@style/TextAppearance.AppCompat.Small"
-            android:textStyle="bold"
             app:layout_constraintStart_toEndOf="@+id/representative_photo"
             app:layout_constraintTop_toTopOf="parent"
-            tools:text="Office Name" />
+            tools:text="Office Name"
+            style="@style/tv_office_style" />
 
         <TextView
             android:id="@+id/official_name"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/margin_small"
             android:text="@{representative.official.name}"
-            android:textAppearance="@style/TextAppearance.AppCompat.Small"
             app:layout_constraintStart_toStartOf="@+id/office_name"
             app:layout_constraintTop_toBottomOf="@+id/office_name"
-            tools:text="Official Name" />
+            tools:text="Official Name"
+            style="@style/tv_official_name_style" />
 
         <TextView
             android:id="@+id/party_name"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/margin_small"
+            style="@style/tv_party_name_style"
             android:text="@{representative.official.party}"
-            android:textAppearance="@style/TextAppearance.AppCompat.Small"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="@+id/official_name"
             app:layout_constraintTop_toBottomOf="@+id/official_name"
             tools:text="Party Name" />

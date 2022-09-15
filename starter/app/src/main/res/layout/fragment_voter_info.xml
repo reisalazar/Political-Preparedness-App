@@ -30,6 +30,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
+            app:title="@{viewModel.selectedElection.name}"
             app:titleTextAppearance="@style/TextAppearance.AppCompat.Large"
             app:titleTextColor="@color/white"
             tools:title="Tool Bar Election Name" />
@@ -38,8 +39,8 @@
         <TextView
             android:id="@+id/tv_election_date"
             style="@style/text_style_voter_date"
+            app:dateText="@{viewModel.selectedElection.electionDay}"
             app:layout_constraintEnd_toEndOf="parent"
-            app:dateText="@{viewModel.voterInfo.election.electionDay}"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tb_election_name"
             tools:text="12 November 2055" />
@@ -48,9 +49,9 @@
         <TextView
             android:id="@+id/tv_state_header"
             style="@style/text_style_state_header"
+            app:electionTitle="@{viewModel.voterInfo}"
             app:layout_constraintStart_toStartOf="@id/tv_election_date"
             app:layout_constraintTop_toBottomOf="@id/tv_election_date"
-            app:targetVisibility="@{viewModel.voterInfo.state}"
             tools:text="Election Information" />
 
         <!--  Add click binding to open web URL -->
@@ -58,10 +59,8 @@
         <TextView
             android:id="@+id/tv_state_locations"
             style="@style/text_style_state_locations"
-            android:onClick="@{()-> viewModel.loadURLs(viewModel.voterInfo.state.get(0).electionAdministrationBody.votingLocationFinderUrl)}"
             app:layout_constraintStart_toStartOf="@id/tv_election_date"
             app:layout_constraintTop_toBottomOf="@id/tv_state_header"
-            app:targetVisibility="@{viewModel.voterInfo.state.get(0).electionAdministrationBody.votingLocationFinderUrl}"
             tools:text="Voting Locations" />
 
         <!--  Add click binding to open web URL -->
@@ -69,10 +68,8 @@
         <TextView
             android:id="@+id/tv_state_ballot"
             style="@style/text_style_ballot"
-            android:onClick="@{()-> viewModel.loadURLs(viewModel.voterInfo.state.get(0).electionAdministrationBody.ballotInfoUrl)}"
             app:layout_constraintStart_toStartOf="@id/tv_election_date"
             app:layout_constraintTop_toBottomOf="@id/tv_state_locations"
-            app:targetVisibility="@{viewModel.voterInfo.state.get(0).electionAdministrationBody.ballotInfoUrl}"
             tools:text="Ballot Information" />
 
         <androidx.constraintlayout.widget.Group
@@ -87,15 +84,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:layout_constraintStart_toStartOf="@id/tv_election_date"
-            app:layout_constraintTop_toBottomOf="@id/tv_state_ballot"
-            app:targetVisibility="@{viewModel.voterInfo.state.get(0).electionAdministrationBody.correspondenceAddress.toFormattedString()}" />
+            app:layout_constraintTop_toBottomOf="@id/tv_state_ballot" />
 
         <!--  Add data binding -->
         <TextView
             android:id="@+id/tv_address"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@{viewModel.voterInfo.state.get(0).electionAdministrationBody.correspondenceAddress.toFormattedString()}"
             app:layout_constraintStart_toStartOf="@id/tv_election_date"
             app:layout_constraintTop_toBottomOf="@id/tv_state_correspondence_header" />
 
@@ -107,23 +102,13 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/margin_small"
-            android:onClick="@{() -> (viewModel.electionFollow(electionId))}"
+            android:onClick="@{() -> viewModel.onFollowButtonClick()}"
+            app:buttonFollowElection="@{viewModel.isElectionSaved}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             tools:text="@string/follow_election" />
 
-        <ProgressBar
-            android:id="@+id/status_loading_wheel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:indeterminate="true"
-            android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:progressStatus="@{viewModel.status}" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
