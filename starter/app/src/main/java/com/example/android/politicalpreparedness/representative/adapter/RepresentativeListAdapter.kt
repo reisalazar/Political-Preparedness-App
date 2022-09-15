@@ -50,12 +50,12 @@ class RepresentativeViewHolder(val binding: ItemListRepresentativeBinding) :
     // Add companion object to inflate ViewHolder (from)
     companion object {
         fun from(parent: ViewGroup): RepresentativeViewHolder {
-            val viewBinding = ItemListRepresentativeBinding.inflate(
+            val binding = ItemListRepresentativeBinding.inflate(
                 LayoutInflater.from(parent.context),
                 parent,
                 false
             )
-            return RepresentativeViewHolder(viewBinding)
+            return RepresentativeViewHolder(binding)
         }
     }
 

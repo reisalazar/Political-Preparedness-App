@@ -50,7 +50,6 @@ interface CivicsApiService {
     // Add representatives API Call
     @GET("representatives")
     fun getAllRepresentativesAsync(@Query("address") address: String): Deferred<RepresentativeResponse>
-
 }
 
 object CivicsApi {

@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
 import com.example.android.politicalpreparedness.databinding.FragmentElectionBinding
 import com.example.android.politicalpreparedness.election.adapter.ElectionListAdapter
 import com.example.android.politicalpreparedness.election.adapter.ElectionListener
@@ -44,11 +45,13 @@ class ElectionsFragment : Fragment() {
         // Initiate recycler adapters
         val electionAdapter = ElectionListAdapter(object : ElectionListener {
             override fun onClick(election: Election) {
-                viewModel.navigationCommand.value = NavigationCommand.To(
-                    ElectionsFragmentDirections.actionElectionsFragmentToVoterInfoFragment(
-                        election.id, election.division
+                this@ElectionsFragment.findNavController()
+                    .navigate(
+                        ElectionsFragmentDirections.actionElectionsFragmentToVoterInfoFragment(
+                            election.id,
+                            election.division
+                        )
                     )
-                )
             }
         })
         val savedElectionAdapter = ElectionListAdapter(object : ElectionListener {

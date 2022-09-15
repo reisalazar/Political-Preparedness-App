@@ -23,7 +23,6 @@ class ElectionsViewModel(
 
     // Create live data val for upcoming elections
     private var _upcomingElections = MutableLiveData<List<Election>>()
-
     val upcomingElections: LiveData<List<Election>>
         get() = _upcomingElections
 
@@ -43,30 +42,44 @@ class ElectionsViewModel(
     // and saved elections from local database
     fun fetchUpcomingElection() {
         viewModelScope.launch {
-            when (val result = networkRepository.value.getAllElections()) {
-                is Result.Success -> {
-                    _status.postValue(Status.SUCCESS)
-                    _upcomingElections.postValue(result.data)
+            _status.postValue(Status.LOADING)
+            kotlin.runCatching {
+                networkRepository.value.getAllElections()
+            }.onSuccess {
+                when (it) {
+                    is Result.Success -> {
+                        _status.postValue(Status.SUCCESS)
+                        _upcomingElections.postValue(it.data)
+                    }
+                    is Result.Error -> {
+                        _status.postValue(Status.ERROR("Error in fetch Upcoming Election"))
+                        showToast.value = "Failed to get elections from network"
+                    }
                 }
-                is Result.Error -> {
-                    _status.postValue(Status.ERROR("Error in fetch Upcoming Election"))
-                    showToast.value = "Failed to get elections from network"
-                }
+            }.onFailure {
+                _status.postValue(Status.ERROR("Failed at the network repository get all elections"))
             }
         }
     }
 
     fun fetchSavedElection() {
         viewModelScope.launch {
-            when (val result = localRepository.value.getAllElections()) {
-                is Result.Success -> {
-                    _status.postValue(Status.SUCCESS)
-                    _upcomingElections.postValue(result.data)
+            kotlin.runCatching {
+                localRepository.value.getAllElections()
+            }.onSuccess {
+                when (it) {
+                    is Result.Success -> {
+                        _status.postValue(Status.SUCCESS)
+                        _upcomingElections.postValue(it.data)
+                    }
+                    is Result.Error -> {
+                        _status.postValue(Status.ERROR("Error in fetch Saved Election"))
+                        showToast.value = "Failed to get elections from saved elections"
+                    }
                 }
-                is Result.Error -> {
-                    _status.postValue(Status.ERROR("Error in fetch Saved Election"))
-                    showToast.value = "Failed to get elections from saved elections"
-                }
+            }.onFailure {
+                _status.postValue(Status.ERROR("Failed at the local repository get all elections"))
+
             }
         }
     }

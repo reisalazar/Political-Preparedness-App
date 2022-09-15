@@ -69,8 +69,10 @@ class VoterInfoViewModel(
     // Add var and methods to save and remove elections to local database
     fun electionFollow(electionId: Long) {
         viewModelScope.launch {
-            LocalRepository.value.getElection(electionId).runCatching {
-                when (this) {
+            kotlin.runCatching {
+                LocalRepository.value.getElection(electionId)
+            }.onSuccess {
+                when (it) {
                     is Result.Success -> {
                         LocalRepository.value.deleteElection(electionId)
                         _isFollow.value = false
@@ -98,7 +100,7 @@ class VoterInfoViewModel(
     // cont'd -- Populate initial state of save button to reflect proper action based on election saved status
     fun populateState(electionId: Long) {
         viewModelScope.launch {
-                LocalRepository.value.getElection(electionId).runCatching {
+            LocalRepository.value.getElection(electionId).runCatching {
                 when (this) {
                     is Result.Error -> {
                         _isFollow.value = false

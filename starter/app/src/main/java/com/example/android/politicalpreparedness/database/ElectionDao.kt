@@ -21,7 +21,7 @@ interface ElectionDao {
 
     // Add select single election query
     @Query("SELECT * FROM election_table WHERE id=:id")
-    suspend fun get(id: Long): Election
+    suspend fun get(id: Long): Election?
 
     // Add delete query
     @Query("delete from election_table where id = :id")

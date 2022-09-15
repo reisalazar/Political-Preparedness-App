@@ -34,12 +34,12 @@ class ElectionListAdapter(private val clickListener: ElectionListener) :
 
         companion object {
             fun from(parent: ViewGroup): ElectionViewHolder {
-                val viewBinding = ItemListElectionBinding.inflate(
+                val binding = ItemListElectionBinding.inflate(
                     LayoutInflater.from(parent.context),
                     parent,
                     false
                 )
-                return ElectionViewHolder(viewBinding)
+                return ElectionViewHolder(binding)
             }
         }
     }

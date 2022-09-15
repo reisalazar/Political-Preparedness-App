@@ -20,7 +20,11 @@ class LocalRepository(private val electionDao: Lazy<ElectionDao>): LocalDataSour
     }
     override suspend fun getElection(id: Long): Result<Election?> {
         val item = electionDao.value.get(id)
-        return Result.Success(item)
+        return if (item != null) {
+            Result.Success(item)
+        } else {
+            Result.Error("Item not found or does not exists")
+        }
     }
 
     override suspend fun deleteElection(id: Long) {

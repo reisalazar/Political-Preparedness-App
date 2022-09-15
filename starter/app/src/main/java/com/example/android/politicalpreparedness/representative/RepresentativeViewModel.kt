@@ -1,10 +1,7 @@
 package com.example.android.politicalpreparedness.representative
 
 import android.app.Application
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import com.example.android.politicalpreparedness.R
 import com.example.android.politicalpreparedness.data.repository.NetworkRepository
 import com.example.android.politicalpreparedness.network.models.Address
@@ -14,13 +11,14 @@ import kotlinx.coroutines.launch
 
 class RepresentativeViewModel(
     private val networkRepository: Lazy<NetworkRepository>,
-    ) : ViewModel() {
+    val app: Application
+) : ViewModel() {
 
     // Establish live data for representatives and address
     val addressLine1 = MutableLiveData<String>()
     val addressLine2 = MutableLiveData<String>()
     val city = MutableLiveData<String>()
-    val state = MutableLiveData<String>()
+    val state = MediatorLiveData<String>()
     val zip = MutableLiveData<String>()
 
     private val _representatives = MutableLiveData<List<Representative>>()
@@ -36,6 +34,12 @@ class RepresentativeViewModel(
     private val _status = MutableLiveData<Status>()
     val status: LiveData<Status>
         get() = _status
+
+    init {
+        state.addSource(selectedItem) {
+            state.value = app.resources.getStringArray(R.array.states)[it]
+        }
+    }
 
 
     // Create function to fetch representatives from API from a provided address
