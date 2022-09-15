@@ -12,12 +12,16 @@
     <string name="address_line_2">Address Line 2</string>
     <string name="city">City</string>
     <string name="zip">Zip</string>
+    <string name="snack_failed_representatives">"Failed to fetch Representatives"</string>
+    <string name="snack_failed_address">""You need to set a Address""</string>
     <string name="follow_election">Follow Election</string>
     <string name="unfollow_election">Unfollow Election</string>
     <string name="img_representative_description">a photo of the representative</string>
     <string name="a_image_of_the_facebook_logo">A image of the facebook logo</string>
     <string name="a_image_of_twitter_logo">A image of Twitter logo</string>
     <string name="a_image_representing_the_world_wide_web">A Image representing the World Wide Web</string>
+    <string name="snack_failed_city">\"You need to set a city\"</string>
+    <string name="snack_failed_zip">\"You need to set a Zip Code\"</string>
 
     <!--  Add necessary string values -->
 
