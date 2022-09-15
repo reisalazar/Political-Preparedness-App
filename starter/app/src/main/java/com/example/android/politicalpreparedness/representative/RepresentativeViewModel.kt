@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.android.politicalpreparedness.R
 import com.example.android.politicalpreparedness.data.repository.NetworkRepository
 import com.example.android.politicalpreparedness.network.models.Address
 import com.example.android.politicalpreparedness.representative.model.Representative
@@ -26,8 +27,8 @@ class RepresentativeViewModel(
     val representatives: LiveData<List<Representative>>
         get() = _representatives
 
-    private val _showSnackBar = MutableLiveData<String>()
-    val showSnackBar: LiveData<String>
+    private val _showSnackBar = MutableLiveData<Int>()
+    val showSnackBar: LiveData<Int>
         get() = _showSnackBar
 
     val selectedItem = MutableLiveData<Int>()
@@ -49,7 +50,7 @@ class RepresentativeViewModel(
                 }
                 Status.SUCCESS
             }.onFailure {
-                _showSnackBar.value = "Failed to fetch Representatives"
+                _showSnackBar.value = R.string.snack_failed_representatives
                 Status.ERROR("Error on loading Representatives")
             }
         }
@@ -77,16 +78,16 @@ class RepresentativeViewModel(
     // Create function to get address from individual fields
     private fun validateEnteredData(): Boolean {
         if (addressLine1.value.isNullOrBlank()) {
-            _showSnackBar.value = "You need to set a Address"
+            _showSnackBar.value = R.string.snack_failed_address
             return false
         }
         if (city.value.isNullOrBlank()) {
-            _showSnackBar.value = "You need to set a city"
+            _showSnackBar.value = R.string.snack_failed_city
 
             return false
         }
         if (zip.value.isNullOrBlank()) {
-            _showSnackBar.value = "You need to set a Zip Code"
+            _showSnackBar.value = R.string.snack_failed_zip
             return false
         }
         return true
