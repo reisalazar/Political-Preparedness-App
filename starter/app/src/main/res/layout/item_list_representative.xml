@@ -69,8 +69,7 @@
 
         <ImageView
             android:id="@+id/www_icon"
-            android:layout_width="35dp"
-            android:layout_height="35dp"
+            style="@style/img_style_address"
             android:layout_marginEnd="@dimen/margin_small"
             android:contentDescription="@string/a_image_representing_the_world_wide_web"
             app:layout_constraintBottom_toBottomOf="parent"

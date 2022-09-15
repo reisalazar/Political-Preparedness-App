@@ -8,9 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
 import com.example.android.politicalpreparedness.R
 import com.example.android.politicalpreparedness.databinding.FragmentVoterInfoBinding
 import com.google.android.material.snackbar.Snackbar
@@ -42,7 +40,7 @@ class VoterInfoFragment : BaseFragment() {
         // Populate voter info -- hide views without provided data.
         arguments?.let {
             val arg = VoterInfoFragmentArgs.fromBundle(requireArguments())
-            viewModel.refresh(arg.argElectionId)
+            viewModel.refreshElections(arg.argElectionId)
         }
 
         // Handle save button UI state

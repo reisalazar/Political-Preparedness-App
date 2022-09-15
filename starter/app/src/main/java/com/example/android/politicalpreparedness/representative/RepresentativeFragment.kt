@@ -32,8 +32,8 @@ import java.util.*
 class DetailFragment : BaseFragment() {
 
     // Add Constant for Location request
-    private lateinit var requestLocationPermissionLauncher: ActivityResultLauncher<String>
-    private lateinit var enableLocationSettingLauncher: ActivityResultLauncher<IntentSenderRequest>
+    private lateinit var requestPermission: ActivityResultLauncher<String>
+    private lateinit var enableLocation: ActivityResultLauncher<IntentSenderRequest>
 
     private lateinit var binding: FragmentRepresentativeBinding
 
@@ -54,50 +54,50 @@ class DetailFragment : BaseFragment() {
                 false
             )
 
-        //: Establish bindings
+        // Establish bindings
         binding.lifecycleOwner = this
         binding.viewModel = viewModel
 
         // Define and assign Representative adapter
-        val adapter = RepresentativeListAdapter()
-        binding.rvRepresentatives.adapter = adapter
-        viewModel.representatives.observe(viewLifecycleOwner) { representatives ->
-            adapter.submitList(representatives)
+        val representativeListAdapter = RepresentativeListAdapter()
+        binding.rvRepresentatives.adapter = representativeListAdapter
+        viewModel.representatives.observe(viewLifecycleOwner) {
+            representativeListAdapter.submitList(it)
         }
 
         // Populate Representative adapter
-
-
         // Establish button listeners for field and location search
         binding.btnSearch.setOnClickListener {
             hideKeyboard()
-            viewModel.onSearchButtonClick()
+            viewModel.searchButtonClick()
         }
 
-        registerLocationPermissionsCallback()
-        registerEnableLocationCallback()
-        binding.btnLocation.setOnClickListener { requestLocationPermissions() }
+        locationPermissionsCallback()
+        enableLocationCallback()
+        binding.btnLocation.setOnClickListener {
+            requestLocationPermissions()
+        }
 
         return binding.root
     }
 
     // Handle location permission result to get location on permission granted
-    private fun registerLocationPermissionsCallback() {
+    private fun locationPermissionsCallback() {
 
-        requestLocationPermissionLauncher = registerForActivityResult(
+        requestPermission = registerForActivityResult(
             ActivityResultContracts.RequestPermission()
         ) { isGranted: Boolean ->
 
             if (isGranted) {
-                checkDeviceLocationSettingsAndGetLocation()
+                checkDeviceLocation()
             } else {
                 viewModel.showSnackBarInt.value = R.string.failed_location_permited
             }
         }
     }
 
-    private fun registerEnableLocationCallback() {
-        enableLocationSettingLauncher = registerForActivityResult(
+    private fun enableLocationCallback() {
+        enableLocation = registerForActivityResult(
             ActivityResultContracts.StartIntentSenderForResult()
         ) { activityResult ->
             if (activityResult.resultCode == Activity.RESULT_OK)
@@ -118,9 +118,9 @@ class DetailFragment : BaseFragment() {
     private fun requestLocationPermissions() {
 
         if (isPermissionGranted()) {
-            checkDeviceLocationSettingsAndGetLocation()
+            checkDeviceLocation()
         } else {
-            requestLocationPermissionLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION)
+            requestPermission.launch(Manifest.permission.ACCESS_FINE_LOCATION)
         }
     }
 
@@ -128,7 +128,7 @@ class DetailFragment : BaseFragment() {
     @SuppressLint("MissingPermission")
     private fun getLocation() {
 
-        val fusedLocationProviderClient =
+        val locationProviderClient =
             LocationServices.getFusedLocationProviderClient(requireContext())
 
         // Get location from LocationServices
@@ -140,9 +140,9 @@ class DetailFragment : BaseFragment() {
                 locationResult.let {
 
                     val address = geoCodeLocation(it.lastLocation)
-                    viewModel.refreshByCurrentLocation(address)
+                    viewModel.refreshCurrentLocation(address)
 
-                    fusedLocationProviderClient.removeLocationUpdates(this)
+                    locationProviderClient.removeLocationUpdates(this)
                 }
             }
         }
@@ -151,39 +151,39 @@ class DetailFragment : BaseFragment() {
         locationRequest.fastestInterval = 0
         locationRequest.priority = LocationRequest.PRIORITY_HIGH_ACCURACY
         Looper.myLooper()?.let {
-            fusedLocationProviderClient.requestLocationUpdates(
+            locationProviderClient.requestLocationUpdates(
                 locationRequest, locationCallback,
                 it
             )
         }
     }
 
-    private fun checkDeviceLocationSettingsAndGetLocation(resolve: Boolean = true) {
+    private fun checkDeviceLocation(resolve: Boolean = true) {
 
         val locationRequest = LocationRequest.create().apply {
             priority = LocationRequest.PRIORITY_LOW_POWER
         }
         val builder = LocationSettingsRequest.Builder().addLocationRequest(locationRequest)
         val settingsClient = LocationServices.getSettingsClient(requireActivity())
-        val locationSettingsResponseTask = settingsClient.checkLocationSettings(builder.build())
+        val locationSettingsResponse = settingsClient.checkLocationSettings(builder.build())
 
-        locationSettingsResponseTask.addOnFailureListener { exception ->
+        locationSettingsResponse.addOnFailureListener { exception ->
             if (exception is ResolvableApiException && resolve) {
                 try {
 
                     val intentSenderRequest =
                         IntentSenderRequest.Builder(exception.resolution).build()
-                    enableLocationSettingLauncher.launch(intentSenderRequest)
+                    enableLocation.launch(intentSenderRequest)
 
-                } catch (sendEx: IntentSender.SendIntentException) {
-                    sendEx.printStackTrace()
+                } catch (intentSender: IntentSender.SendIntentException) {
+                    intentSender.printStackTrace()
                 }
             } else {
                 viewModel.showSnackBarInt.value = R.string.failed_location_permited
             }
         }
 
-        locationSettingsResponseTask.addOnCompleteListener {
+        locationSettingsResponse.addOnCompleteListener {
             if (it.isSuccessful) {
                 getLocation()
             }
@@ -192,18 +192,18 @@ class DetailFragment : BaseFragment() {
 
     private fun geoCodeLocation(location: Location): Address {
         val geocoder = context?.let { Geocoder(it, Locale.getDefault()) }
-            return geocoder?.getFromLocation(location.latitude, location.longitude, 1)
-                ?.map { address ->
-                    Address(
-                        address.thoroughfare,
-                        address.subThoroughfare,
-                        address.locality,
-                        address.adminArea,
-                        address.postalCode
-                    )
-                }
-                ?.first()!!
-        }
+        return geocoder?.getFromLocation(location.latitude, location.longitude, 1)
+            ?.map { address ->
+                Address(
+                    address.thoroughfare,
+                    address.subThoroughfare,
+                    address.locality,
+                    address.adminArea,
+                    address.postalCode
+                )
+            }
+            ?.first()!!
+    }
 
     private fun hideKeyboard() {
         val imm = activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager

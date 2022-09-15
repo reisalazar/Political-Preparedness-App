@@ -21,28 +21,27 @@ class VoterInfoRepository(
     val voterInfo: LiveData<VoterInfo>
         get() = _voterInfo
 
-    suspend fun getSavedElection(id: Int) : Election?{
+    suspend fun getElection(id: Int) : Election?{
         val election = withContext(Dispatchers.IO) {
             return@withContext savedElectionDatabase.get(id)
         }
         return election
     }
-    suspend fun insertSavedElection(election: Election) {
+    suspend fun insertElection(election: Election) {
         withContext(Dispatchers.IO) {
             savedElectionDatabase.insert(election)
         }
     }
-    suspend fun deleteSavedElection(election: Election) {
+    suspend fun deleteElection(election: Election) {
         withContext(Dispatchers.IO) {
             savedElectionDatabase.delete(election)
         }
     }
 
-    suspend fun refreshVoterInfo(address:String, id:Int) {
+    suspend fun refreshVoter(address:String, id:Int) {
         withContext(Dispatchers.IO) {
-
-            val response = api.getVoterInfo(address, id)
-            val data = convertToVoterInfo(id, response)
+            val result = api.getVoterInfo(address, id)
+            val data = convertToVoterInfo(id, result)
             data?.run {
                 voterInfoDatabase.insert(this)
             }

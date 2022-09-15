@@ -32,7 +32,7 @@
             style="@style/et_address_style"
             android:autofillHints="@string/address_line_1"
             android:hint="@string/address_line_1"
-            android:text="@={viewModel.address.line1}"
+            android:text="@={viewModel.addressList.line1}"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tv_search_title" />
 
@@ -45,7 +45,7 @@
             android:layout_height="0dp"
             android:autofillHints="@string/address_line_2"
             android:hint="@string/address_line_2"
-            android:text="@={viewModel.address.line2}"
+            android:text="@={viewModel.addressList.line2}"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/et_address_line_1" />
 
@@ -58,7 +58,7 @@
             android:layout_height="wrap_content"
             android:autofillHints="@string/city"
             android:hint="@string/city"
-            android:text="@={viewModel.address.city}"
+            android:text="@={viewModel.addressList.city}"
             app:layout_constraintEnd_toStartOf="@id/spinner_state"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/et_address_line_2" />
@@ -71,9 +71,9 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:autofillHints="postalAddress"
-            android:entries="@{viewModel.states}"
+            android:entries="@{viewModel.statesList}"
             android:inputType="textPostalAddress"
-            android:selectedItemPosition="@={viewModel.selectedStateIndex}"
+            android:selectedItemPosition="@={viewModel.stateSelected}"
             app:layout_constraintBottom_toBottomOf="@id/et_city"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/et_city"
@@ -86,7 +86,7 @@
             style="@style/zip_style"
             android:autofillHints="@string/zip"
             android:hint="@string/zip"
-            android:text="@={viewModel.address.zip}"
+            android:text="@={viewModel.addressList.zip}"
             app:layout_constraintEnd_toEndOf="@id/et_city"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/et_city" />

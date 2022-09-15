@@ -24,51 +24,51 @@ class VoterInfoViewModel(app: Application): BaseViewModel(app) {
     val voterInfo = repository.voterInfo
 
     // Add live data to hold voter info
-    private val _selectedElection = MutableLiveData<Election>()
-    val selectedElection : LiveData<Election>
-        get() = _selectedElection
+    private val _election = MutableLiveData<Election>()
+    val election : LiveData<Election>
+        get() = _election
 
-    private val _isElectionSaved = MutableLiveData<Boolean?>()
-    val isElectionSaved : LiveData<Boolean?>
-        get() = _isElectionSaved
+    private val _electionSaved = MutableLiveData<Boolean?>()
+    val electionSaved : LiveData<Boolean?>
+        get() = _electionSaved
 
-    private val mockData = true
-    val mockVoterInfo = MutableLiveData<VoterInfo>()
+    private val mock = true
+    private val mockVoterInfo = MutableLiveData<VoterInfo>()
 
 
     // Add var and methods to populate voter info
-    fun refresh(election: Election) {
-        _selectedElection.value = election
+    fun refreshElections(election: Election) {
+        _election.value = election
         refreshIsElectionSaved(election)
         refreshVoterInfo(election)
     }
-    private fun refreshIsElectionSaved(data: Election) {
+    private fun refreshIsElectionSaved(electionData: Election) {
         viewModelScope.launch {
             try {
-                val savedElection = repository.getSavedElection(data.id)
-                _isElectionSaved.postValue(savedElection != null)
+                val election = repository.getElection(electionData.id)
+                _electionSaved.postValue(election != null)
 
-            } catch (e: Exception) {
-                e.printStackTrace()
+            } catch (exception: Exception) {
+                exception.printStackTrace()
             }
         }
     }
 
 
     // Add var and methods to support loading URLs
-    private fun refreshVoterInfo(data: Election) {
+    private fun refreshVoterInfo(electionData: Election) {
         viewModelScope.launch {
             try {
-                val state = if(data.division.state.isEmpty()) "ny" else data.division.state
-                val address = "${state},${data.division.country}"
+                val state = electionData.division.state.ifEmpty { "ny" }
+                val address = "${state},${electionData.division.country}"
 
-                repository.refreshVoterInfo(address, data.id)
-                repository.loadVoterInfo(data.id)
+                repository.refreshVoter(address, electionData.id)
+                repository.loadVoterInfo(electionData.id)
 
             } catch (e: Exception) {
                 e.printStackTrace()
                 showSnackBarInt.postValue(R.string.no_connection)
-                repository.loadVoterInfo(data.id)
+                repository.loadVoterInfo(electionData.id)
             }
         }
     }
@@ -76,11 +76,11 @@ class VoterInfoViewModel(app: Application): BaseViewModel(app) {
     // Add var and methods to save and remove elections to local database
     fun onFollowButtonClick() {
         viewModelScope.launch {
-            _selectedElection.value?.let {
-                if(isElectionSaved.value == true) {
-                    repository.deleteSavedElection(it)
+            _election.value?.let {
+                if(this@VoterInfoViewModel.electionSaved.value == true) {
+                    repository.deleteElection(it)
                 } else {
-                    repository.insertSavedElection(it)
+                    repository.insertElection(it)
                 }
                 refreshIsElectionSaved(it)
             }
@@ -92,7 +92,7 @@ class VoterInfoViewModel(app: Application): BaseViewModel(app) {
      */
     // cont'd -- Populate initial state of save button to reflect proper action based on election saved status
     init {
-        if(mockData) {
+        if(mock) {
             val data = VoterInfo(
                 2000,
                 "State XYZ",
@@ -101,7 +101,7 @@ class VoterInfoViewModel(app: Application): BaseViewModel(app) {
             mockVoterInfo.postValue(data)
         }
 
-        _isElectionSaved.value = null
+        _electionSaved.value = null
     }
 
 }

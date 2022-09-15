@@ -30,7 +30,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:title="@{viewModel.selectedElection.name}"
+            app:title="@{viewModel.election.name}"
             app:titleTextAppearance="@style/TextAppearance.AppCompat.Large"
             app:titleTextColor="@color/white"
             tools:title="Tool Bar Election Name" />
@@ -39,7 +39,7 @@
         <TextView
             android:id="@+id/tv_election_date"
             style="@style/text_style_voter_date"
-            app:dateText="@{viewModel.selectedElection.electionDay}"
+            app:dateText="@{viewModel.election.electionDay}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tb_election_name"
@@ -103,7 +103,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/margin_small"
             android:onClick="@{() -> viewModel.onFollowButtonClick()}"
-            app:buttonFollowElection="@{viewModel.isElectionSaved}"
+            app:buttonFollowElection="@{viewModel.electionSaved}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

@@ -1,7 +1,6 @@
 package com.example.android.politicalpreparedness.election
 
 import android.app.Application
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.android.politicalpreparedness.R
@@ -11,7 +10,7 @@ import com.example.android.politicalpreparedness.data.repository.ElectionsReposi
 import com.example.android.politicalpreparedness.network.CivicsApiInstance
 import com.example.android.politicalpreparedness.network.models.Division
 import com.example.android.politicalpreparedness.network.models.Election
-     import com.udacity.project4.base.BaseViewModel
+import com.udacity.project4.base.BaseViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.util.*
@@ -30,7 +29,7 @@ class ElectionsViewModel(app: Application) : BaseViewModel(app) {
     // Create live data val for saved elections
     val savedElections = repository.savedElections
 
-    private val _mockElections = MutableLiveData<List<Election>>()
+    private val _mock = MutableLiveData<List<Election>>()
 
     // Create functions to navigate to saved or upcoming election voter info
     private fun refreshElections() {
@@ -44,7 +43,7 @@ class ElectionsViewModel(app: Application) : BaseViewModel(app) {
         }
     }
 
-    private fun mockElections() {
+    private fun mock() {
         val mockElections = mutableListOf<Election>()
         var count = 1
         if (count <= 5) {
@@ -57,7 +56,7 @@ class ElectionsViewModel(app: Application) : BaseViewModel(app) {
             mockElections.add(data)
             ++count
         }
-        _mockElections.postValue(mockElections)
+        _mock.postValue(mockElections)
     }
 
     // Create val and functions to populate live data for upcoming elections from the API
@@ -66,7 +65,7 @@ class ElectionsViewModel(app: Application) : BaseViewModel(app) {
 
     init {
         if (mockData) {
-            mockElections()
+            mock()
         } else {
             refreshElections()
         }
