@@ -9,6 +9,7 @@
     <string name="my_representatives">My Representatives</string>
     <string name="use_my_location">Use my location</string>
     <string name="address_line_1">Address Line 1</string>
+    <string name="election_information">Election Information: %s</string>
     <string name="address_line_2">Address Line 2</string>
     <string name="city">City</string>
     <string name="zip">Zip</string>
@@ -20,8 +21,7 @@
     <string name="a_image_of_the_facebook_logo">A image of the facebook logo</string>
     <string name="a_image_of_twitter_logo">A image of Twitter logo</string>
     <string name="a_image_representing_the_world_wide_web">A Image representing the World Wide Web</string>
-    <string name="snack_failed_city">\"You need to set a city\"</string>
-    <string name="snack_failed_zip">\"You need to set a Zip Code\"</string>
+    <string name="no_connection">Please connect to the Internet to continue</string>
 
     <!--  Add necessary string values -->
 

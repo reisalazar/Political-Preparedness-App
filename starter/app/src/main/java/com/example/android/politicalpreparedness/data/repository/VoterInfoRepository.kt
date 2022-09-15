@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.android.politicalpreparedness.data.SavedElectionDatabase
 import com.example.android.politicalpreparedness.data.VoterInfoDatabase
-import com.example.android.politicalpreparedness.network.CivicsApiService
+import com.example.android.politicalpreparedness.network.CivicsApiInstance
 import com.example.android.politicalpreparedness.network.models.Election
 import com.example.android.politicalpreparedness.network.models.VoterInfo
 import com.example.android.politicalpreparedness.network.models.VoterInfoResponse
@@ -14,7 +14,8 @@ import kotlinx.coroutines.withContext
 class VoterInfoRepository(
     private val voterInfoDatabase: VoterInfoDatabase,
     private val savedElectionDatabase: SavedElectionDatabase,
-    private val api: CivicsApiService) {
+    private val api: CivicsApiInstance
+) {
 
     private val _voterInfo = MutableLiveData<VoterInfo>()
     val voterInfo: LiveData<VoterInfo>
